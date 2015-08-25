@@ -6,25 +6,25 @@ var express = require('express');
 var cpuCount = require('os').cpus().length;
 var childCount = cpuCount / 2;
 
-// if (cluster.isMaster) {
-//   // Fork workers.
-//   for (var i = 0; i < 1; i++) {
-//     cluster.fork();
-//   }
+if (cluster.isMaster) {
+  console.info('Spawning %s children', childCount);
 
-//   cluster.on('exit', function(worker, code, signal) {
-//     console.log('worker ' + worker.process.pid + ' died');
-//   });
-// }
-// else {
+  // Fork workers.
+  for (var i = 0; i < childCount; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', function(worker, code, signal) {
+    console.log('worker ' + worker.process.pid + ' died');
+  });
+}
+else {
   var seneca1 = seneca();
 
   seneca1.use('seneca-beanstalk-transport')
     .use('seneca-web');
 
-  seneca1.client({
-    type: 'beanstalk'
-  });
+  seneca1.client({ type: 'beanstalk' });
 
   // Create a web.
   seneca1.add({ role: 'test-web', cmd: 'proxy' }, function (args, done) {
@@ -50,9 +50,7 @@ var childCount = cpuCount / 2;
   // ----------------------------------------------------------
 
   var seneca2 = seneca({
-    transport: {
-      type: 'beanstalk'
-    }
+    transport: { type: 'beanstalk' }
   });
 
   seneca2.use('seneca-beanstalk-transport');
@@ -63,4 +61,4 @@ var childCount = cpuCount / 2;
   });
 
   seneca2.listen();
-// }
+}
