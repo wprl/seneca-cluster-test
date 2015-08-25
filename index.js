@@ -57,6 +57,7 @@ else {
 
   // Create a worker.
   seneca2.add({ role: 'test-worker', cmd: 'ping' }, function (args, done) {
+    console.info('REPLYING PONG');
     return done(null, { msg: 'pong' });
   });
 
