@@ -3,14 +3,12 @@
 var seneca = require('seneca');
 var cluster = require('cluster');
 var express = require('express');
-var cpuCount = require('os').cpus().length;
-var childCount = cpuCount / 2;
 
 if (cluster.isMaster) {
-  console.info('Spawning %s children', childCount);
+  console.info('Spawning %s children', 2);
 
   // Fork workers.
-  for (var i = 0; i < childCount; i++) {
+  for (var i = 0; i < 2; i++) {
     cluster.fork();
   }
 
