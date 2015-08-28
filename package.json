@@ -13,7 +13,7 @@
     "express": "^4.13.3",
     "seneca": "^0.6.4",
     "seneca-beanstalk-transport": "^0.2.1",
-    "seneca-rabbitmq-transport": "^0.2.1",
+    "seneca-rabbitmq-transport": "https://github.com/iantocristian/seneca-rabbitmq-transport.git#b40edf5e018c4fd4b9ddfba71a510a8b88c111e4",
     "seneca-web": "^0.4.3"
   }
 }
