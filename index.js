@@ -19,10 +19,10 @@ if (cluster.isMaster) {
 else {
   var seneca1 = seneca();
 
-  seneca1.use('seneca-beanstalk-transport')
+  seneca1.use('seneca-rabbitmq-transport')
     .use('seneca-web');
 
-  seneca1.client({ type: 'beanstalk' });
+  seneca1.client({ type: 'rabbitmq' });
 
   // Create a web.
   seneca1.add({ role: 'test-web', cmd: 'proxy' }, function (args, done) {
@@ -48,10 +48,10 @@ else {
   // ----------------------------------------------------------
 
   var seneca2 = seneca({
-    transport: { type: 'beanstalk' }
+    transport: { type: 'rabbitmq' }
   });
 
-  seneca2.use('seneca-beanstalk-transport');
+  seneca2.use('seneca-rabbitmq-transport');
 
   // Create a worker.
   seneca2.add({ role: 'test-worker', cmd: 'ping' }, function (args, done) {
