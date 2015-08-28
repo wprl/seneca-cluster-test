@@ -4,6 +4,9 @@ var seneca = require('seneca');
 var cluster = require('cluster');
 var express = require('express');
 
+var mq = process.env.TRANSPORT || 'rabbitmq';
+var transport = 'seneca-' + mq + '-transport';
+
 if (cluster.isMaster) {
   console.info('Spawning %s children', 2);
 
@@ -19,10 +22,10 @@ if (cluster.isMaster) {
 else {
   var seneca1 = seneca();
 
-  seneca1.use('seneca-rabbitmq-transport')
+  seneca1.use(transport)
     .use('seneca-web');
 
-  seneca1.client({ type: 'rabbitmq' });
+  seneca1.client({ type: mq });
 
   // Create a web.
   seneca1.add({ role: 'test-web', cmd: 'proxy' }, function (args, done) {
@@ -48,10 +51,10 @@ else {
   // ----------------------------------------------------------
 
   var seneca2 = seneca({
-    transport: { type: 'rabbitmq' }
+    transport: { type: mq }
   });
 
-  seneca2.use('seneca-rabbitmq-transport');
+  seneca2.use(transport);
 
   // Create a worker.
   seneca2.add({ role: 'test-worker', cmd: 'ping' }, function (args, done) {
